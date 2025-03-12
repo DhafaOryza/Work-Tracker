@@ -76,16 +76,19 @@ const upload = multer({
 // Create Task
 app.post('/tasks', upload.array('files'), async (req, res) => {
     try {
-        const { title, description, status, tags, subtags } = req.body;
+        const { task, tags, subtags } = req.body;
+        const parsedTask = JSON.parse(task);
+        const { title, description, status } = parsedTask;
+        
         const files = req.files.map(file => ({
             filename: file.filename,
             path: file.path,
             mimetype: file.mimetype,
         }));
 
-        const task = new Task({ title, description, status, tags, subtags, files });
-        await task.save();
-        res.status(201).json(task);
+        const newTask = new Task({ title, description, status, tags, subtags, files });
+        await newTask.save();
+        res.status(201).json(newTask);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

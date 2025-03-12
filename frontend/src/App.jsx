@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks } from "./redux/taskSlice";
+import { fetchTasks } from "./Redux/taskSlice";
 import TaskCard from "./Pages/TaskCard";
 import TaskPanel from "./Pages/TaskPanel";
 

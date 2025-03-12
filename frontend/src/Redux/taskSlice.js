@@ -1,11 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-// Async thunk to fetch tasks
+// Fetch tasks
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
     const response = await axios.get('http://localhost:5000/tasks');
     return response.data;
 });
+
+// Add a new task
+export const addTask = createAsyncThunk('tasks/addTask', async (formData) => {
+    const response = await axios.post('http://localhost:5000/tasks', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return response.data;
+})
 
 const taskSlice = createSlice({
     name: 'tasks',
@@ -27,6 +37,9 @@ const taskSlice = createSlice({
             .addCase(fetchTasks.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
+            })
+            .addCase(addTask.fulfilled, (state, action) => {
+                state.items.push(action.payload);
             });
     },
 });
